@@ -5,6 +5,8 @@ import { Routes } from './routes';
 
 import * as mongoose from 'mongoose';
 
+require('dotenv-safe').config();
+
 class App {
   public app: express.Application; 
   public routeApi: Routes = new Routes();
