@@ -23,6 +23,6 @@ export class Routes {
     app.route('/login').post(this.authController.logar);
     app.route('/changepassword').post(auth, this.userController.changePassword);
 
-    app.route('/up').post(upload.single('avatar'), this.avatarController.up);
+    app.route('/up/:id').post(upload.single('avatar'), this.avatarController.up);
   }
 }

@@ -1,6 +1,8 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
+import { AvatarProps, AvatarSchema } from './Avatar';
+
 let mongooseHidden = require('mongoose-hidden')();
 
 const Schema = mongoose.Schema;
@@ -10,6 +12,7 @@ export interface UserProps extends mongoose.Document {
   name: string;
   email: string;
   password: string;
+  avatar: AvatarProps;
 }
 
 export const UserSchema = new Schema<UserProps>({
@@ -22,6 +25,7 @@ export const UserSchema = new Schema<UserProps>({
     type: String,
     hide: true,
   },
+  avatar: AvatarSchema,
   create_date: {
     type: Date,
     default: Date.now
