@@ -19,5 +19,6 @@ export class Routes {
       .delete(this.userController.remove);
     
     app.route('/login').post(this.authController.logar);
+    app.route('/changepassword').post(auth, this.userController.changePassword);
   }
 }

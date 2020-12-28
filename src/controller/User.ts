@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
-import { UserSchema } from '../models/User';
+import { UserProps, UserSchema } from '../models/User';
 import { Request, Response } from 'express';
+import * as bcrypt from 'bcrypt';
 
 const User = mongoose.model('User', UserSchema);
 
@@ -42,9 +43,11 @@ export class UserController {
 
   // edit
   public edit(req: Request, res: Response) {
+    const user = req.body;
+    delete user.password;
     User.findOneAndUpdate(
       { _id: req.params.id },
-      req.body,
+      user,
       { new: true },
       (err, doc) => {
       if (err) {
@@ -64,6 +67,35 @@ export class UserController {
 
       res.json({
         message: 'The user as been removed'
+      });
+    });
+  }
+
+  //change password
+  public changePassword(req: Request, res: Response) {
+    const { password, changeNewPassword } = req.body;
+
+    User.findById((<any>req).user._id, async (err, user: UserProps) => {
+      if (err) {
+        res.send(err);
+      }
+
+      if (user) {
+        const passwordIdValid = await bcrypt.compare(password, user.password);
+
+        if (passwordIdValid) {
+          user.password = changeNewPassword;
+          user.save();
+          res.send(user);
+        }
+
+        res.status(401).send({
+          message: 'USer not found'
+        });
+      }
+
+      res.status(401).send({
+        message: 'USer not found'
       });
     });
   }
